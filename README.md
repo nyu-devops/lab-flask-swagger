@@ -73,6 +73,8 @@ Finally you can see the microservice at: [http://localhost:5000/](http://localho
 
 The Swagger docs can be accessed at: [http://localhost:5000/apidocs/index.html](http://localhost:5000/apidocs/index.html)
 
+The raw Swagger specification JSON can be found at: [http://localhost:5000/v1/spec](http://localhost:5000/v1/spec)
+
 When you are done, you can exit and shut down the VM with:
 
     exit
