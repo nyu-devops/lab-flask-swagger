@@ -30,7 +30,7 @@ Then all you have to do is clone this repo and invoke vagrant:
 
 Since this lab has no database (it's just an in memory array) you can use **Virtualenv** to setup your Python environment instead of **Vagrant**.
 
-**Note:** _If you are using a Mac, this will work right out-of-the-box becasue the Mac has everything you need to do software development right from Apple. If you are using Windows, you will need to install [Python 2.7](https://www.python.org/downloads/release/python-2712/) and `pip` first becasue Windows does not ship with any development tools. :(_
+**Note:** _If you are using a Mac, this will work right out-of-the-box becasue the Mac has everything you need to do software development right from Apple. If you are using Windows, you will need to install [Python 2.7](https://www.python.org/downloads/release/python-2712/) and `pip` first becasue Windows does not ship with any development tools. :( I strongly recommend that Windows users use the Vagrant approach above._
 
 To use `virtualenv` follow these commands:
 

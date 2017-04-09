@@ -119,7 +119,7 @@ class TestPetServer(unittest.TestCase):
         resp = self.app.get('/pets/5')
         self.assertEqual( resp.status_code, HTTP_404_NOT_FOUND )
 
-    def test_query_pet_list(self):
+    def test_query_pet_list_by_category(self):
         resp = self.app.get('/pets', query_string='category=dog')
         self.assertEqual( resp.status_code, HTTP_200_OK )
         self.assertTrue( len(resp.data) > 0 )
@@ -128,6 +128,17 @@ class TestPetServer(unittest.TestCase):
         data = json.loads(resp.data)
         query_item = data[0]
         self.assertEqual(query_item['category'], 'dog')
+
+    def test_query_pet_list_by_name(self):
+        resp = self.app.get('/pets', query_string='name=fido')
+        self.assertEqual( resp.status_code, HTTP_200_OK )
+        self.assertTrue( len(resp.data) > 0 )
+        print resp.data
+        self.assertTrue( 'fido' in resp.data)
+        self.assertFalse( 'kitty' in resp.data)
+        data = json.loads(resp.data)
+        query_item = data[0]
+        self.assertEqual(query_item['name'], 'fido')
 
     def test_method_not_allowed(self):
         resp = self.app.post('/pets/0')

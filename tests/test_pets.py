@@ -115,6 +115,14 @@ class TestPets(unittest.TestCase):
         self.assertEqual( pets[0].category, "cat" )
         self.assertEqual( pets[0].name, "kitty" )
 
+    def test_find_by_name(self):
+        Pet(0, "fido", "dog").save()
+        Pet(0, "kitty", "cat").save()
+        pets = Pet.find_by_name("kitty")
+        self.assertEqual( len(pets), 1 )
+        self.assertEqual( pets[0].category, "cat" )
+        self.assertEqual( pets[0].name, "kitty" )
+
 
 ######################################################################
 #   M A I N

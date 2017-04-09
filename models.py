@@ -79,3 +79,7 @@ class Pet(object):
     @staticmethod
     def find_by_category(category):
         return [pet for pet in Pet.__data if pet.category == category]
+
+    @staticmethod
+    def find_by_name(name):
+        return [pet for pet in Pet.__data if pet.name == name]

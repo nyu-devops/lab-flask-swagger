@@ -19,7 +19,13 @@ from flask_api import status    # HTTP Status Codes
 from werkzeug.exceptions import NotFound
 from models import Pet
 
+# Pull options from environment
+debug = (os.getenv('DEBUG', 'False') == 'True')
+port = os.getenv('PORT', '5000')
+
+# Initialize Flask
 app = Flask(__name__)
+
 # Configure Swagger before initilaizing it
 app.config['SWAGGER'] = {
     "swagger_version": "2.0",
@@ -33,6 +39,7 @@ app.config['SWAGGER'] = {
         }
     ]
 }
+
 # Initialize Swagger after configuring it
 Swagger(app)
 
@@ -87,6 +94,11 @@ def list_pets():
         description: the category of Pet you are looking for
         required: false
         type: string
+      - name: name
+        in: query
+        description: the name of Pet you are looking for
+        required: false
+        type: string
     responses:
       200:
         description: An array of Pets
@@ -108,8 +120,11 @@ def list_pets():
     """
     pets = []
     category = request.args.get('category')
+    name = request.args.get('name')
     if category:
         pets = Pet.find_by_category(category)
+    elif name:
+        pets = Pet.find_by_name(name)
     else:
         pets = Pet.all()
 
@@ -208,9 +223,7 @@ def create_pets():
         description: Bad Request (the posted data was not valid)
     """
     pet = Pet()
-    print "Request: {}".format(request.get_json())
     pet.deserialize(request.get_json())
-    print "Pet: {}".format(pet.serialize())
     pet.save()
     message = pet.serialize()
     return make_response(jsonify(message), status.HTTP_201_CREATED, {'Location': pet.self_url() })
@@ -302,10 +315,6 @@ def delete_pets(id):
         pet.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
 
-
-# Pull options from environment
-debug = (os.getenv('DEBUG', 'False') == 'True')
-port = os.getenv('PORT', '5000')
 
 ######################################################################
 #   M A I N
