@@ -48,23 +48,32 @@ Swagger(app)
 ######################################################################
 @app.errorhandler(ValueError)
 def request_validation_error(e):
+    """ Handles validation errors """
     return bad_request(e)
 
 @app.errorhandler(404)
 def not_found(e):
-    return make_response(jsonify(status=404, error='Not Found', message=e.description), status.HTTP_404_NOT_FOUND)
+    """ Handles 404 Not Fund errors """
+    return make_response(jsonify(status=404, error='Not Found',
+                                 message=e.description), status.HTTP_404_NOT_FOUND)
 
 @app.errorhandler(400)
 def bad_request(e):
-    return make_response(jsonify(status=400, error='Bad Request', message=e.message), status.HTTP_400_BAD_REQUEST)
+    """ Handles 400 Bad Requests """
+    return make_response(jsonify(status=400, error='Bad Request',
+                                 message=e.message), status.HTTP_400_BAD_REQUEST)
 
 @app.errorhandler(405)
 def method_not_allowed(e):
-    return make_response(jsonify(status=405, error='Method not Allowed', message='Your request method is not supported. Check your HTTP method and try again.'), status.HTTP_405_METHOD_NOT_ALLOWED)
+    """ Handles 405 Method Not Allowed """
+    return make_response(jsonify(status=405, error='Method not Allowed',
+                                 message='Your request method is not supported. Check your HTTP method and try again.'), status.HTTP_405_METHOD_NOT_ALLOWED)
 
 @app.errorhandler(500)
 def internal_error(e):
-    return make_response(jsonify(status=500, error='Internal Server Error', message='Huston... we have a problem.'), status.HTTP_500_INTERNAL_SERVER_ERROR)
+    """ Handles 500 Server Errors """
+    return make_response(jsonify(status=500, error='Internal Server Error',
+                                 message='Huston... we have a problem.'), status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 ######################################################################
@@ -72,6 +81,7 @@ def internal_error(e):
 ######################################################################
 @app.route("/")
 def index():
+    """ Home Page """
     return jsonify(name='Pet Demo REST API Service',
                    version='1.0',
                    docs=request.base_url + 'apidocs/index.html'), status.HTTP_200_OK
@@ -99,6 +109,19 @@ def list_pets():
         description: the name of Pet you are looking for
         required: false
         type: string
+    definitions:
+      Pet:
+        type: object
+        properties:
+          id:
+            type: integer
+            description: unique id assigned internallt by service
+          name:
+            type: string
+            description: the pets's name
+          category:
+            type: string
+            description: the category of pet (e.g., dog, cat, fish, etc.)
     responses:
       200:
         description: An array of Pets
@@ -106,17 +129,7 @@ def list_pets():
           type: array
           items:
             schema:
-              id: Pet
-              properties:
-                id:
-                  type: integer
-                  description: unique id assigned internallt by service
-                name:
-                  type: string
-                  description: the pets's name
-                category:
-                  type: string
-                  description: the category of pet (e.g., dog, cat, fish, etc.)
+              $ref: '#/definitions/Pet'
     """
     pets = []
     category = request.args.get('category')
@@ -154,17 +167,7 @@ def get_pets(id):
       200:
         description: Pet returned
         schema:
-          id: Pet
-          properties:
-            id:
-              type: integer
-              description: unique id assigned internallt by service
-            name:
-              type: string
-              description: the pets's name
-            category:
-              type: string
-              description: the category of pet (e.g., dog, cat, fish, etc.)
+          $ref: '#/definitions/Pet'
       404:
         description: Pet not found
     """
@@ -208,17 +211,7 @@ def create_pets():
       201:
         description: Pet created
         schema:
-          id: Pet
-          properties:
-            id:
-              type: integer
-              description: unique id assigned internally by service
-            name:
-              type: string
-              description: the pets's name
-            category:
-              type: string
-              description: the category of pet (e.g., dog, cat, fish, etc.)
+          $ref: '#/definitions/Pet'
       400:
         description: Bad Request (the posted data was not valid)
     """
@@ -226,7 +219,8 @@ def create_pets():
     pet.deserialize(request.get_json())
     pet.save()
     message = pet.serialize()
-    return make_response(jsonify(message), status.HTTP_201_CREATED, {'Location': pet.self_url() })
+    return make_response(jsonify(message), status.HTTP_201_CREATED,
+                         {'Location': pet.self_url() })
 
 ######################################################################
 #  Update a Pet
@@ -267,17 +261,7 @@ def update_pets(id):
       200:
         description: Pet Updated
         schema:
-          id: Pet
-          properties:
-            id:
-              type: integer
-              description: unique id assigned internallt by service
-            name:
-              type: string
-              description: the pets's name
-            category:
-              type: string
-              description: the category of pet (e.g., dog, cat, fish, etc.)
+          $ref: '#/definitions/Pet'
       400:
         description: Bad Request (the posted data was not valid)
     """
