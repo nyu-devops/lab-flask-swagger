@@ -10,3 +10,4 @@ pinocchio==0.4.2
 # Code coverage
 coverage==4.2
 codecov==2.0.5
+setuptools>=65.5.1 # not directly required, pinned by Snyk to avoid a vulnerability
